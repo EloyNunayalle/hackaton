@@ -1,0 +1,64 @@
+org: llorent
+service: api-usuario-diagram
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 30
+  iam:
+    role: arn:aws:iam::231672913990:role/LabRole
+  environment:
+    TABLE_NAME: ${sls:stage}-t_usuarios
+    TOKEN_TABLE_NAME: ${sls:stage}-t_tokens_acceso
+
+functions:
+  CrearUsuario:
+    handler: CrearUsuario.lambda_handler
+    events:
+      - http:
+          path: /usuario/crear
+          method: post
+          cors: true
+
+  LoginUsuario:
+    handler: LoginUsuario.lambda_handler
+    events:
+      - http:
+          path: /usuario/login
+          method: post
+          cors: true
+
+  ValidarTokenAcceso:
+    handler: ValidarTokenAcceso.lambda_handler
+    
+
+resources:
+  Resources:
+    TablaUsuarios:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: tenant_id
+            AttributeType: S
+          - AttributeName: sort_key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenant_id
+            KeyType: HASH
+          - AttributeName: sort_key
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    TablaTokensAcceso:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TOKEN_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: token
+            AttributeType: S
+        KeySchema:
+          - AttributeName: token
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST

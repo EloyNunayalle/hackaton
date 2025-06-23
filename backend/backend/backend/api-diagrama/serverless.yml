@@ -1,0 +1,68 @@
+org: llorent
+service: api-diagramas-new
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 30
+  region: us-east-1
+  environment:
+    S3_BUCKET_NAME: diagramas-${sls:stage}-bucket
+    VALIDATE_TOKEN_LAMBDA_NAME: api-usuario-diagram-${sls:stage}-ValidarTokenAcceso
+  iam:
+    role: arn:aws:iam::231672913990:role/LabRole
+  ecr:
+    images:
+      appimage:
+        path: .  # usa "." sin comillas
+
+functions:
+  generarDiagrama:
+    handler: Mermaid.lambda_handler
+    timeout: 29
+    events:
+      - http:
+          path: /generar/Mermaid
+          method: post
+          cors: true
+          integration: lambda
+          
+
+  generarDesdeJson:
+    handler: jsonMermaid.lambda_handler
+    timeout: 29
+    events:
+      - http:
+          path: /generar/jsonMermaid
+          method: post
+          cors: true
+          integration: lambda
+          
+  listarArchivosPublico:
+    handler: listar_s3.lambda_handler
+    timeout: 20
+    events:
+      - http:
+          path: /listar/s3/publico
+          method: get
+          cors: true
+
+
+  generarDesdeDiagrams:
+    image:
+      name: appimage  # <--- referencia exacta al nombre declarado arriba
+    timeout: 30
+    memorySize: 512
+    events:
+      - http:
+          path: /generar/diagrams
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    DiagramaBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: diagramas-${sls:stage}-bucket
