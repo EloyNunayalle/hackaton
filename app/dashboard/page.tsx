@@ -183,7 +183,7 @@ with Diagram('Arquitectura Completa sin CI/CD', filename='/tmp/arquitectura_micr
     name: 'Entity Relationship',
     description: 'Diagramas de base de datos ER',
     icon: Database,
-    api: 'https://68axiykxw7.execute-api.us-east-1.amazonaws.com/dev/generar/entityRelationship',
+    api: 'https://68axiykxw7.execute-api.us-east-1.amazonaws.com/dev/listar/s3/publico',
     example: `erDiagram
     CUSTOMER ||--o{ ORDER : places
     ORDER ||--|{ LINE-ITEM : contains
