@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador LL(1)</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Analizador LL(1)</h1>
+        
+        <div class="flex-container">
+            <div class="flex-item">
+                <label for="grammar">Gramática (EBNF):</label>
+                <textarea id="grammar" placeholder="Ingrese la gramática en formato EBNF usando → o -> ) como separador de NO TERMINAL y PRODUCCIÓN"></textarea>
+            </div>
+            <div class="flex-item">
+                <label for="input">Cadena de entrada:</label>
+                <textarea id="input" placeholder="Ingrese la cadena para analizar"></textarea>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button id="analyze-btn">Analizar</button>
+            <button id="example1-btn" class="example-btn">Ejemplo 1</button>
+            <button id="example2-btn" class="example-btn">Ejemplo 2</button>
+            <button id="clear-btn" class="clear-btn">Limpiar</button>
+        </div>
+        
+        <div id="output">El resultado del análisis se mostrará aquí...</div>
+    </div>
+
+    <script src="./js/LL1.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
